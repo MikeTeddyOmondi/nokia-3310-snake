@@ -2,7 +2,7 @@
 
 This is a simple Snake game implemented in JavaScript, using HTML5 Canvas for rendering. 
 
-![stream everyday 715 to 900 warsaw time zone](https://github.com/BekBrace/nokia3310-snake/assets/60483846/3423d086-73f1-488a-aae5-10a68de157fc)
+![stream everyday 715 to 900 warsaw time zone](https://github.com/BekBrace/nokia3310-snake/assets/60483846/33c73fdd-5149-4165-92de-353d0c4edc4e)
 
 The game includes basic functionalities such as snake movement, collision detection, and apple consumption.
 
