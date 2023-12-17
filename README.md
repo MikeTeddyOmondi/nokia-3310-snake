@@ -40,7 +40,7 @@ To run the Snake game, follow these steps:
 
 ## Contributors
 
-- [Your Name]
+- Amir Bekhit | Bek Brace Channel
 
-Feel free to contribute or provide feedback to enhance the game!
+Feel free to contribute or provide feedback to enhance the game as mentionned in the video [Fork the game, modify and submit a merge request for review].
 
