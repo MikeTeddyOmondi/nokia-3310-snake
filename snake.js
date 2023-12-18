@@ -8,6 +8,7 @@ const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
  // Eating and Collision Sound added
+// Updated for sound effects on December 18th, 2023.
 const collisionSound = document.getElementById('collisionSound');
 const eatingSound = document.getElementById('eatingSound');
 
@@ -21,15 +22,10 @@ let score = 0;
 // This is a snake object created 
 // x is the x coordination of the snake on the canvas, and initially is set to 160
 // y is the y coordination of the snake on the canvas, and initially is set to 160
-// dx is the horizontal velocity of the snake, this is set to grid: the snake 
-// moves by the size of one grid cell horizontally
-//dy is the vertical velocity of the snake's velocity, and its 
-//value is set to zero, which means that the snake is currently is moving 
-//horizontally.
-//cells is an empty array, where we will store inside it all of the snake
-//segments [indivdual cells].
-// the maxCells is set to 4, this is the maximum number of cells 
-// in the snake's body.
+// dx is the horizontal velocity of the snake, this is set to grid: the snake moves by the size of one grid cell horizontally
+// dy is the vertical velocity of the snake's velocity, and its value is set to zero, which means that the snake is currently is moving horizontally.
+// cells is an empty array, where we will store inside it all of the snake segments [indivdual cells].
+// The maxCells is set to 4, this is the maximum number of cells in the snake's body.
 let snake = {
   x: 160,
   y: 160,
@@ -51,28 +47,23 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-
 // gameRunning is a boolean value set to false initially 
 let gameRunning = false;
 // gamePaused also is a boolean value set to false initially
 let gamePaused = false;
 
-//  This variable is used to store the ID returned by 
-//  the requestAnimationFrame function, which is part 
-//  of the game loop mechanism. 
-//  This ID can be used later to cancel the animation 
-//  frame if needed, for example, when the game ends or is paused.
+//  (animationFrame) variable is used to store the ID returned by the requestAnimationFrame function, which is part of the game loop mechanism. 
+//  This ID can be used later to cancel the animation frame if needed, for example, when the game ends or is paused.
 let animationFrame;
-
 let startButton = document.querySelector('.start-button');
 let gameOverScreen = document.querySelector('.game-over');
 let scoreDisplay = document.querySelector('.score-display');
 
 // Actual game start even, and that should be the last thing
 startButton.addEventListener('click', function() {
-  // LAST STEP. Start Game Function
+  // Sanity Check:
   // console.log("button is clicked!");
-	startGame();
+ startGame();
 });
 
 gameOverScreen.querySelector('.start-button').addEventListener('click', function() {
@@ -220,8 +211,10 @@ function loop() {
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
+  // Draw the gems and the snake
   context.fillStyle = '#fff';
   context.fillRect(gem.x, gem.y, grid - 1, grid - 1);
+	
   // Set shadow properties
   context.shadowColor = 'rgba(0, 0, 0, 0.5)';
   context.shadowBlur = 5;
@@ -251,6 +244,8 @@ function loop() {
       if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
         // End the game
         endGame();
+	// Play sound of collision
+	collisionSound.play();
       }
     }
   });
