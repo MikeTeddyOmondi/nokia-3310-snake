@@ -9,7 +9,6 @@ html, body{
 body{
     display: flex;
     align-items: center;
-    text-align: center;
     justify-content: center;
 }
 
@@ -17,7 +16,6 @@ canvas {
     border: 2px solid #748c72;
     background: linear-gradient(#8fb58a,#a7d4a1,#abcfa5,#8fb58a);
     box-shadow: inset 0 0 50px rgba(0,0,0,0.4);
-    border: 1px solid #000;
 }
 
 .title{
