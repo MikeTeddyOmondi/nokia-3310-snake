@@ -7,12 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- <div class="title">Snake</div> -->
     <canvas width="400" height="400" id="game"></canvas>
     <button class="start-button">Start</button>
     <div class="game-over">
         <h2>Game Over</h2>
         <p>Final Score: <span class="score-display">0</span></p>
         <button class="start-button">Again</button>
+        <audio id="collisionSound" src="coll.mp3"></audio>
+        <audio id="eatingSound" src="eat.mp3"></audio>
     </div>
     <script src="snake.js"></script>
 </body>
