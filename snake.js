@@ -5,10 +5,11 @@
 //This line gets a reference to the HTML5 Canvas element in your HTML document.
 const canvas = document.getElementById('game');
 // This line retrieves the 2D rendering context of the Canvas. 
-// The '2d' argument specifies that you want to work with a 2D rendering context. 
-// This context is what you use to draw on the Canvas using various 
-// drawing methods and properties.
 const context = canvas.getContext('2d');
+
+ // Eating and Collision Sound added
+const collisionSound = document.getElementById('collisionSound');
+const eatingSound = document.getElementById('eatingSound');
 
 // grid of the game canvas is composed of 16 square cells.
 let grid = 16;
@@ -38,8 +39,8 @@ let snake = {
   maxCells: 4
 };
 
-// apple object has its x and y coordinates on the grid, both set to 320
-let apple = {
+// gem object has its x and y coordinates on the grid, both set to 320
+let gem = {
   x: 320,
   y: 320
 };
@@ -91,76 +92,55 @@ let touchStartY = 0;
 
 document.addEventListener('keydown', function(e) {
     // 6. Event Listeners Callbacks (Keyboard)
-   // The first thing the callback does is check if the game 
-  // is not running (!gameRunning). 
- // If the game is not running, it immediately returns, 
-// and the rest of the code in the callback won't be executed.
   if (!gameRunning) {
     return;
   }
-        // Snake movement based on arrow keys 
-       // Here if the game is running, it checks the value of 
-	  // e.which to determine whicha arrow key was
-     // pressed, not only which key was pressed, but also 
-	// the current direction of the snake dx and dy:
-   // it updates the snake's velocity 
-  // the snake is restricted from moving in the opposite direction 
- // immediately, it's not allowed
-// to reverse direction
-	// LEFT KEY
+// Snake movement based on arrow keys. Here if the game is running, it checks the value of 
+// e.which to determine whicha arrow key was pressed, not only which key was pressed, but also 
+// the current direction of the snake dx and dy:
+// it updates the snake's velocity the snake is restricted from moving in the opposite direction 
+// immediately, it's not allowed to reverse direction
+// CODE 37 : LEFT KEY
   if (e.which === 37 && snake.dx === 0) {
-	  // snake.dx = -grid : This sets the dx property of the snake (horizontal velocity)
-	  // to a a negative value equivalent to the grid size.
-	  // This means the snake will move to the left on the next frame.
-	  // snake.dy = 0: this sets the snake snake vertical movement to zero, ensuring the snake will
-	  // not move vertically.
-	snake.dx = -grid;
+    snake.dx = -grid;
     snake.dy = 0;
-	  // UP KEY
-	 // snake.dy = -grid;: This sets the dy property of the snake (vertical velocity)
-	// to a negative value equivalent to the grid size. 
-   // This means the snake will move upward on the next frame.
-  // snake.dx = 0;: This sets the dx property of the snake (horizontal velocity) 
- // to zero, ensuring that the snake is not moving horizontally.
+// CODE 38 : UP KEY
   } else if (e.which === 38 && snake.dy === 0) {
     snake.dy = -grid;
     snake.dx = 0;
-	  // RIGHT KEY
+// CODE 39 : RIGHT KEY
   } else if (e.which === 39 && snake.dx === 0) {
     snake.dx = grid;
     snake.dy = 0;
-	  // DOWN KEY
+// CODE 40 : DOWN KEY
   } else if (e.which === 40 && snake.dy === 0) {
     snake.dy = grid;
     snake.dx = 0;
   }
 });
 
-// This line says, "When a touchstart event happens 
-// on the document (webpage), do the following..."
-// we're going to have a callback function that takes 
-// an event as input, and checks if the game is not running, it returns and
-// nothing of the following code will be executed.
+
+/////////////////////////////////////////////////////////////////////
+// 6. Event Listeners Callbacks (Touch Screen For Smartphone Version)
+/////////////////////////////////////////////////////////////////////
+
+// This line says, "When a touchstart event happens on the document (webpage), do the following..."
+// we're going to have a callback function that takes an event as input, and checks if 
+// the game is not running, it returns and nothing of the following code will be executed.
 // This is a safety check to ensure that touch events are happening when game is active.
 document.addEventListener('touchstart', function(e) {
-  // 6. Event Listeners Callbacks (Touch)
   if (!gameRunning) {
     return;
   }
-	
-  //If the game is running, this part captures the x and y 
-  //coordinates of the first touch point. e.touches[0] refers 
-  //to the first touch point in the touch event, and clientX 
-  //and clientY give the horizontal and vertical coordinates of 
-  //where the touch occurred on the screen.
+//If the game is running, this part captures the x and y coordinates of the first touch point. e.touches[0] refers 
+//to the first touch point in the touch event, and clientX and clientY give the horizontal and vertical coordinates of 
+//where the touch occurred on the screen.
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
-  // "When someone touches the screen (touchstart event), 
-  // and the game is running, remember where they started 
+  // "When someone touches the screen (touchstart event), and the game is running, remember where they started 
   // touching by storing the x and y coordinates of the first touch." 
-  // This information is often used to track gestures or 
-  // movements on touch devices, such as swiping or tapping, 
-  // which can then be used in game controls or other interactions.
+  // This information is often used to track gestures or movements on touch devices, 
+  //such as swiping or tapping, which can then be used in game controls or other interactions.
 });
 
 document.addEventListener('touchmove', function(e) {
@@ -196,6 +176,11 @@ document.addEventListener('touchmove', function(e) {
   }
 });
 
+////////////////////////////////////
+//END of TOUCHSCREEN FUNCTIONALITIES
+////////////////////////////////////
+
+
 // 3. Main Loop Event / Function
 function loop() {
   if (!gameRunning || gamePaused) {
@@ -229,21 +214,14 @@ function loop() {
   }
 
   // Update snake cells and handle collisions
-  // The unshift method: used to add a new object representing 
-  // the head of the snake to the snake.cells array. 
   // { x: snake.x, y: snake.y } represents the current position of the snake's head. 
   // The unshift() method is used to add this position to the front of the snake.
-  // cells array, effectively extending the length of the snake by adding a 
-  // new head at each iteration of the game loop.
   snake.cells.unshift({ x: snake.x, y: snake.y });
-
   if (snake.cells.length > snake.maxCells) {
     snake.cells.pop();
   }
-
   context.fillStyle = '#fff';
-  context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
-
+  context.fillRect(gem.x, gem.y, grid - 1, grid - 1);
   // Set shadow properties
   context.shadowColor = 'rgba(0, 0, 0, 0.5)';
   context.shadowBlur = 5;
@@ -254,15 +232,18 @@ function loop() {
   snake.cells.forEach(function(cell, index) {
     context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
 
-    if (cell.x === apple.x && cell.y === apple.y) {
-      // Snake eats apple
+    if (cell.x === gem.x && cell.y === gem.y) {
+      // Snake eats gem
       snake.maxCells++;
       score++;
       scoreDisplay.textContent = score;
-
-      // Generate a new random apple position
-      apple.x = getRandomInt(0, 25) * grid;
-      apple.y = getRandomInt(0, 25) * grid;
+	    
+      // Play eating sound
+      eatingSound.play();
+      
+     // Generate a new random gem position
+      gem.x = getRandomInt(0, 25) * grid;
+      gem.y = getRandomInt(0, 25) * grid;
     }
 
     // Check for collisions with the snake's own body
@@ -289,8 +270,8 @@ function startGame() {
   snake.maxCells = 4;
   snake.dx = grid;
   snake.dy = 0;
-  apple.x = getRandomInt(0, 25) * grid;
-  apple.y = getRandomInt(0, 25) * grid;
+  gem.x = getRandomInt(0, 25) * grid;
+  gem.y = getRandomInt(0, 25) * grid;
   startButton.style.display = 'none';
   gameOverScreen.style.display = 'none';
   scoreDisplay.textContent = score;
