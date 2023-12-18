@@ -222,9 +222,9 @@ function loop() {
   context.shadowOffsetY = 2;
   context.fillStyle = '#061138';
 
+  // Eating the gem logic.
   snake.cells.forEach(function(cell, index) {
     context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
-
     if (cell.x === gem.x && cell.y === gem.y) {
       // Snake eats gem
       snake.maxCells++;
